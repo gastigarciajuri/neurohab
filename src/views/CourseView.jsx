@@ -1,6 +1,6 @@
 import React from 'react';
 import ModuleCard from '../components/ModuleCard';
-import ProgressBar from '../components/ProgressBar';
+import UserProgress from '../components/UserProgress';
 
 const CourseView = ({ modules, progress }) => {
   console.log('Modules:', modules); // Añadir esta línea para ver los módulos en consola
@@ -12,8 +12,8 @@ const CourseView = ({ modules, progress }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-blue-700 mb-4">Curso de Programación</h2>
-      <ProgressBar progress={progress || 0} /> {/* Valor predeterminado en caso de que progress sea undefined */}
+      <h2 className="text-2xl font-bold text-blue-700 mb-4">Curso de Hábitos</h2>
+      <UserProgress progress={progress || 0} /> {/* Valor predeterminado en caso de que progress sea undefined */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {modules.map((module, index) => (
           <ModuleCard key={index} {...module} />
