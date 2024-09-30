@@ -11,6 +11,7 @@ import TestResultsView from './views/TestResultsView';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './components/PrivateRoute'; // Mantener el componente actualizado
 
+
 function App() {
   // Usamos el hook de Firebase para obtener el estado de autenticación
   const [user, loading] = useAuthState(auth);
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/user" element={<LoginPage />} />
         <Route
           path="/course"
           element={
