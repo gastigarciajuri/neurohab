@@ -6,6 +6,7 @@ import { loginWithGoogle } from '../../firebase/client';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/client';
+import bgImage from '../assets/background.jpg'
 
 
 const LandingPage = () => {
@@ -25,16 +26,15 @@ const LandingPage = () => {
 
   return (
     <Layout>
-      <div className="relative h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/path/to/your/background-image.jpg)' }}> 
+      <div className="relative h-screen bg-cover bg-center" style={{ backgroundImage: `${bgImage}` }}> 
         <div className="flex flex-col items-center justify-center h-full bg-black bg-opacity-50">
           <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-md">¡Bienvenido a la plataforma de E-Learning!</h1>
           <p className="text-xl text-gray-200 mb-8 drop-shadow-md">
-            Empieza tu camino en la programación con cursos diseñados para que aprendas de manera efectiva y a tu propio ritmo.
-          </p>
-          
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam harum aliquam rerum eos itaque modi consectetur, vero dignissimos rem similique dolor
+          </p>          
           {user ? (
             <Link to="/course">
-              <button className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
+              <button className="bg-blue-950 text-white py-3 px-6 rounded-lg hover:bg-blue-950 transition duration-300">
                 Acceder al curso
               </button>
             </Link>
@@ -42,7 +42,7 @@ const LandingPage = () => {
             <div className="mt-6">
               <button
                 onClick={handleGoogleLogin}
-                className="bg-gray-700 text-white py-3 px-6 rounded-lg hover:bg-red-600 flex items-center justify-center transition duration-300"
+                className="bg-slate-900 text-white py-3 px-6 rounded-lg hover:bg-red-600 flex items-center justify-center transition duration-300"
               >
                 <img
                   src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"

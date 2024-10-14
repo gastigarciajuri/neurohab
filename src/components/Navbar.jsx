@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from '../../firebase/client'; // Asegúrate de tener la función logout
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [user] = useAuthState(auth);
@@ -26,7 +27,9 @@ const Navbar = () => {
   }, [menuOpen]);
   return (
     <nav className="container mx-auto flex justify-between">
+      <Link to="/">
             <h1 className="text-2xl font-bold">NEUROFIT</h1>
+      </Link>
           {user ? (
             <div className="relative flex items-center">
               <img
