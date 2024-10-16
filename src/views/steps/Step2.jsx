@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layout';
+import { updateUserProgress } from '../../../firebase/progress';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../../firebase/client';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-const Step2 = ({ onContinue }) => {
+
+const Step2 = () => {
+  const [user] = useAuthState(auth);
   const [textRead, setTextRead] = useState(false);
+  const navigate = useNavigate(); 
 
-  const handleTextRead = () => {
+  const handleTextRead = async () => {
     setTextRead(true);
-    localStorage.setItem('course_progress', 3); // Guardar el progreso solo cuando el texto ha sido leído
+    // Actualizar el progreso del usuario en Firestore al completar el paso 2
+    if (user) {
+      await updateUserProgress(user.uid, 2); // Paso 2
+    }
+
+    // Desbloquear el siguiente paso solo en el front-end
+  };
+
+  const handleContinue = () => {
+    if (textRead) {
+      navigate('/course/step3'); // Navegar a Step3
+    }
   };
 
   return (
@@ -16,7 +34,7 @@ const Step2 = ({ onContinue }) => {
       
       <button 
         className={`mt-4 py-2 px-4 rounded-lg ${textRead ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-500 cursor-not-allowed'}`}
-        onClick={onContinue}
+        onClick={handleContinue}
         disabled={!textRead}
       >
         Continuar

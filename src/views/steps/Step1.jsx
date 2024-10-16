@@ -1,25 +1,29 @@
-// src/steps/Step1.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '../../components/Layout';
-import { auth, db } from '../../../firebase/client';
-import { doc, updateDoc } from 'firebase/firestore';
+import { updateUserProgress } from '../../../firebase/progress';
+import { auth } from '../../../firebase/client';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
-
-const Step1 = ({ onContinue }) => {
+const Step1 = () => {
+  const [user] = useAuthState(auth);
   const [videoCompleted, setVideoCompleted] = useState(false);
-  const user = auth.currentUser; // Obtén el usuario autenticado
+  const navigate = useNavigate(); 
 
-  // Maneja el evento de finalización del video
   const handleVideoEnd = async () => {
-    setVideoCompleted(true); // Habilitar el botón al finalizar el video
+    setVideoCompleted(true);    
+    // Actualizar el progreso del usuario en Firestore al completar el paso 1
+    if(user){
 
-    if (user) {
-      const userRef = doc(db, 'users', user.uid); // Referencia al documento del usuario
+      await updateUserProgress(user.uid, 1);  // Guardar el progreso solo en la base de datos
+    }
 
-      // Actualiza el progreso del usuario en Firestore
-      await updateDoc(userRef, {
-        progress: 2 // Asigna el nuevo progreso (en este caso, al segundo paso)
-      });
+    // Desbloquear el siguiente paso solo en el front-end al completar el paso actual
+  };
+
+  const handleContinue = () => {
+    if (videoCompleted) {
+      navigate('/course/step2'); // Navegar a Step2
     }
   };
 
@@ -38,8 +42,8 @@ const Step1 = ({ onContinue }) => {
       {/* Botón de "Continuar" */}
       <button 
         className={`mt-4 py-2 px-4 rounded-lg ${videoCompleted ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-500 cursor-not-allowed'}`}
-        onClick={onContinue}  // Función que mueve al siguiente paso
-        disabled={!videoCompleted}  // Deshabilitado hasta que se termine el video
+        onClick={handleContinue}  
+        disabled={!videoCompleted}  
       >
         Continuar
       </button>

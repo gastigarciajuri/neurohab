@@ -5,7 +5,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/client'; // Importa tu configuración de Firebase
 import LandingPage from './pages/LandingPage';
 import CoursePage from './pages/CoursePage';
-
 import Step1 from './views/steps/Step1';
 import Step2 from './views/steps/Step2';
 import Step3 from './views/steps/Step3';
@@ -42,7 +41,7 @@ function App() {
           path="/course/step1"
           element={
             <PrivateRoute user={user}>
-              <Step1 onContinue={() => window.location.href = '/course/step2'} />
+              <Step1 />
             </PrivateRoute>
           }
         />
@@ -50,7 +49,7 @@ function App() {
           path="/course/step2"
           element={
             <PrivateRoute user={user}>
-              <Step2 onContinue={() => window.location.href = '/course/step3'} />
+              <Step2 />
             </PrivateRoute>
           }
         />
@@ -58,7 +57,7 @@ function App() {
           path="/course/step3"
           element={
             <PrivateRoute user={user}>
-              <Step3 onComplete={() => window.location.href = '/course/feedback'} />
+              <Step3 />
             </PrivateRoute>
           }
         />
@@ -66,7 +65,7 @@ function App() {
           path="/course/step4"
           element={
             <PrivateRoute user={user}>
-              <Step4 onContinue={() => window.location.href = '/course/step5'} />
+              <Step4 />
             </PrivateRoute>
           }
         />

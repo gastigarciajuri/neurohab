@@ -1,64 +1,11 @@
-// import React from 'react';
-// import UserProgress from '../components/UserProgress';
-// import { Link } from 'react-router-dom';
-
-// const CourseView = ({ progress }) => {
-//   // Verificar si el progreso existe y es válido
-//   const currentStep = progress || 1; // Suponiendo que el progreso inicial sea el paso 1
-
-//   return (
-//     <div>
-//       <h2 className="text-2xl font-bold text-blue-700 mb-4">Curso de Hábitos</h2>
-      
-//       {/* Componente que muestra el progreso del usuario */}
-//       <UserProgress progress={currentStep} /> 
-
-//       <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-//         <p className="text-lg">
-//           Bienvenido al curso de hábitos.
-//            El curso está diseñado para completarse en secuencia. 
-//            Avanza por cada paso cuando estés listo.
-//         </p>
-
-//         {/* Aquí mostramos el botón para ir al siguiente paso del curso, basado en el progreso actual */}
-//         {currentStep === 1 && (
-//           <Link to="/course/step1" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-//             Comenzar Curso - Introducción
-//           </Link>
-//         )}
-//         {currentStep === 2 && (
-//           <Link to="/course/step2" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-//             Continuar a la Introducción de los Test
-//           </Link>
-//         )}
-//         {currentStep === 3 && (
-//           <Link to="/course/step3" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-//             Realizar los Test
-//           </Link>
-//         )}
-//         {currentStep === 4 && (
-//           <Link to="/course/step4" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-//             Ver Video de Contenido
-//           </Link>
-//         )}
-//         {currentStep === 5 && (
-//           <Link to="/course/step5" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-//             Descargar Material
-//           </Link>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CourseView;
 import React, { useEffect, useState } from 'react';
 import UserProgress from '../components/UserProgress';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const CourseView = () => {
   // Estado para manejar el progreso actual del usuario
   const [currentStep, setCurrentStep] = useState(1);
+  const navigate = useNavigate()
 
   // Recuperar el progreso desde localStorage al cargar el componente
   useEffect(() => {
@@ -75,18 +22,17 @@ const CourseView = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-blue-700 mb-4">Curso de Hábitos</h2>
+    <div className='bg-gray-50 p-6 rounded-lg shadow-md'>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Curso de Hábitos</h2>
       
-      {/* Componente que muestra el progreso del usuario */}
+      {/* Componente que muestra el progreso del usuario */} 
       <UserProgress progress={currentStep} /> 
 
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-        <p className="text-lg">
-          Bienvenido al curso de hábitos.
-          El curso está diseñado para completarse en secuencia. 
-          Avanza por cada paso cuando estés listo.
-        </p>
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+        <p className="text-lg text-gray-600 mb-4">
+          Bienvenido al curso de hábitos.  </p> 
+          <p>Este curso está diseñado para completarse en secuencia, avanza por cada paso cuando estés listo.</p>
+      
 
         {/* Botones basados en el paso actual del usuario */}
         {currentStep === 1 && (
@@ -134,10 +80,10 @@ const CourseView = () => {
             Descargar Material
           </Link>
         )}
+       
       </div>
     </div>
   );
 };
 
 export default CourseView;
-

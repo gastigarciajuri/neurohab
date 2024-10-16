@@ -1,57 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, logout } from '../../firebase/client'; // Asegúrate de tener la función logout
+// src/components/Navbar.jsx
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/client';
+import { signOut } from 'firebase/auth';
 
 const Navbar = () => {
-    const [user] = useAuthState(auth);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null); // Crear una referencia para el menú
+  const [user] = useAuthState(auth);
 
-  const handleLogout = async () => {
-    await logout();
-    setMenuOpen(false); // Cerrar el menú después de cerrar sesión
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      console.log('Sesión cerrada');
+    }).catch((error) => {
+      console.error('Error al cerrar sesión', error);
+    });
   };
 
-  const handleClickOutside = (event) => {
-    if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false); // Cerrar el menú si se hace clic fuera de él
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside); // Escuchar clics en el documento
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside); // Limpiar el listener al desmontar
-    };
-  }, [menuOpen]);
   return (
-    <nav className="container mx-auto flex justify-between">
-      <Link to="/">
-            <h1 className="text-2xl font-bold">NEUROFIT</h1>
-      </Link>
+    <nav className="bg-blue-900 text-white py-4 px-8 shadow-lg">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-2xl font-bold hover:text-gray-300 transition duration-300">
+          NEUROFIT
+        </Link>
+        <div>
           {user ? (
-            <div className="relative flex items-center">
-              <img
-                src={user.photoURL}
-                alt="Profile"
-                className="w-8 h-8 rounded-full cursor-pointer"
-                onClick={() => setMenuOpen(!menuOpen)} // Alternar menú
-              />
-              {menuOpen && (
-                <div ref={menuRef} className="absolute right-0 top-6 bg-white text-black shadow-md mt-2 rounded-lg">
-                  <button
-                    onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-200"
-                  >
-                    Cerrar Sesión
-                  </button>
-                </div>
-              )}
+            <div className="flex items-center">
+              <img src={user.photoURL} alt="Avatar" className="w-10 h-10 rounded-full mr-4" />
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-800 transition duration-300"
+              >
+                Cerrar sesión
+              </button>
             </div>
-          ) : null}
-        </nav>
-  )
-}
+          ) : (
+            <Link to="/login">
+              <button className="bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-500 transition duration-300">
+                Iniciar sesión
+              </button>
+            </Link>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;

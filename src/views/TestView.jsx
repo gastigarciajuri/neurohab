@@ -6,20 +6,20 @@ const TestView = ({ test, onComplete }) => {
 
   //  /*Handler para el select*/
    
-  const handleSelectChange = (sectionIndex, questionIndex, value) => {
-    setAnswers({
-      ...answers,
-      [`${sectionIndex}-${questionIndex}`]: Number(value),
-    });
-  };
-
-  // Handler para el checkbox
-  // const handleCheckboxChange = (sectionIndex, questionIndex, value) => {
+  // const handleSelectChange = (sectionIndex, questionIndex, value) => {
   //   setAnswers({
   //     ...answers,
   //     [`${sectionIndex}-${questionIndex}`]: Number(value),
   //   });
   // };
+
+  // Handler para el checkbox
+  const handleCheckboxChange = (sectionIndex, questionIndex, value) => {
+    setAnswers({
+      ...answers,
+      [`${sectionIndex}-${questionIndex}`]: Number(value),
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const TestView = ({ test, onComplete }) => {
               <label className="block text-lg mb-2">{question}</label>
 
               {/* Opción 1: Dropdown Select */}
-              <select
+              {/* <select
                 value={answers[`${sectionIndex}-${questionIndex}`] || ''}
                 onChange={(e) => handleSelectChange(sectionIndex, questionIndex, e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg"
@@ -47,10 +47,10 @@ const TestView = ({ test, onComplete }) => {
                 <option value="2">Algunas veces</option>
                 <option value="3">A menudo</option>
                 <option value="4">Siempre</option>
-              </select>
+              </select> */}
 
               {/* Opción 2: Checkboxes   */}
-                {/* <div className="flex space-x-2 mt-2">
+                <div className="flex space-x-2 mt-2">
                   {[1, 2, 3, 4, 5].map((value) => (
                     <label key={value} className="flex items-center space-x-1">
                       <input
@@ -62,7 +62,7 @@ const TestView = ({ test, onComplete }) => {
                       <span>{value}</span>
                     </label>
                   ))}
-                </div> */}
+                </div>
             </div>
           ))}
         </div>
