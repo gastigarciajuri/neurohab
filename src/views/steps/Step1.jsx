@@ -11,19 +11,12 @@ const Step1 = () => {
   const navigate = useNavigate(); 
 
   const handleVideoEnd = async () => {
-    setVideoCompleted(true);    
-    // Actualizar el progreso del usuario en Firestore al completar el paso 1
-    if(user){
-
-      await updateUserProgress(user.uid, 1);  // Guardar el progreso solo en la base de datos
-    }
-
-    // Desbloquear el siguiente paso solo en el front-end al completar el paso actual
+    setVideoCompleted(true);          
   };
-
   const handleContinue = () => {
+    user && updateUserProgress(user.uid, 1);      
     if (videoCompleted) {
-      navigate('/course/step2'); // Navegar a Step2
+      navigate('/course/step2');
     }
   };
 
@@ -35,7 +28,7 @@ const Step1 = () => {
       <video 
         src={"https://www.w3schools.com/html/mov_bbb.mp4"} 
         controls 
-        onEnded={handleVideoEnd}  // Detecta cuando el video ha terminado
+        onEnded={handleVideoEnd}  
         className="w-full h-72 max-w-3xl mx-auto"
       />
 

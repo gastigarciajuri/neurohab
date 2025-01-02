@@ -13,17 +13,12 @@ const Step2 = () => {
 
   const handleTextRead = async () => {
     setTextRead(true);
-    // Actualizar el progreso del usuario en Firestore al completar el paso 2
-    if (user) {
-      await updateUserProgress(user.uid, 2); // Paso 2
-    }
-
-    // Desbloquear el siguiente paso solo en el front-end
   };
 
   const handleContinue = () => {
+    user && updateUserProgress(user.uid, 2);
     if (textRead) {
-      navigate('/course/step3'); // Navegar a Step3
+      navigate('/course/step3'); 
     }
   };
 

@@ -1,7 +1,11 @@
 // src/components/TestCorrector.jsx
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-const Feedback = ({ answers, test }) => {
+
+const Feedback = () => {
+  const location = useLocation()
+  const { answers, test } = location.state || {};
   const sectionScores = test.secciones.map((section, sectionIndex) => {
     const sectionTotal = section.preguntas.reduce((total, _, questionIndex) => {
       return total + (answers[`${sectionIndex}-${questionIndex}`] || 0);

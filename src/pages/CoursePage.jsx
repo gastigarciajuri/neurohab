@@ -14,19 +14,24 @@ const CoursePage = () => {
 
   useEffect(() => {
     const loadUserData = async () => {
-      if (user) {
-        const progress = await getUserProgress(user.uid);
-        setUserProgress(progress);
-
-        const moduleData = await getModuleData("module1"); // Cambia 'module1' por el ID adecuado
-        if (moduleData) {
-          setCurrentModule(moduleData);
-          const updatedSteps = moduleData.steps.map((step, index) => ({
-            ...step,
-            status: index < progress ? "completed" : index === progress ? "unlocked" : "locked"
-          }));
-          setStepsStatus(updatedSteps);
+      try {
+        if (user) {
+          const progress = await getUserProgress(user.uid);
+          setUserProgress(progress);
+  
+          const moduleData = await getModuleData("module1"); // Cambia 'module1' por el ID adecuado
+          if (moduleData) {
+            setCurrentModule(moduleData);
+            const updatedSteps = moduleData.steps.map((step, index) => ({
+              ...step,
+              status: index < progress ? "completed" : index === progress ? "unlocked" : "locked"
+            }));
+            setStepsStatus(updatedSteps);
+          }
         }
+      }
+      catch(error){
+        console.error("error", error.message);
       }
     };
 

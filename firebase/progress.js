@@ -1,7 +1,8 @@
 // src/firebase/progress.js
 import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./client";
-
+import { storage } from "./client";
+import { ref, getDownloadURL } from "firebase/storage";
 // Función para inicializar o actualizar el progreso del usuario en Firestore
 export const initializeUserProgress = async (user) => {
   const userRef = doc(db, "users", user.uid);
@@ -59,4 +60,14 @@ export const getModuleData = async (moduleId) => {
   }
 };
 
-
+//Funcion para obtener URL de archivo Storage
+export const getFileURL = async (filePath) => {
+  try {
+    const fileRef = ref(storage, filePath); // Referencia al archivo
+    const fileURL = await getDownloadURL(fileRef); // Obtener la URL de descarga
+    return fileURL; // Devolver la URL del archivo
+  } catch (error) {
+    console.error('Error al obtener la URL del archivo:', error);
+    throw error;
+  }
+};

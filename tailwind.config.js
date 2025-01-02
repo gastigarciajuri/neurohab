@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
     bone: '#f9f7f1',
+    footer: '#383961',
     blue: {
       100: '#dbeafe',
       200: '#bfdbfe',
