@@ -34,7 +34,6 @@ const CoursePage = () => {
         console.error("error", error.message);
       }
     };
-
     loadUserData();
   }, [user]);
 
