@@ -1,32 +1,107 @@
-// src/pages/CoursePage.jsx
-import React from 'react';
-import Layout from '../components/Layout';
-import CourseView from '../views/CourseView';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Navbar from '../components/Navbar';
+import { getUserProgress, getModuleData } from '../../firebase/progress';
+import { auth } from '../../firebase/client';
 
 const CoursePage = () => {
-  // Ejemplo de datos, estos serían dinámicos
-  const modules = [
-    { title: 'Módulo 1: Introducción', completed: true, locked: false },
-    { title: 'Módulo 2: Fundamentos', completed: true, locked: false },
-    { title: 'Módulo 3: Proyecto Final', completed: true, locked: false },
-  ];
+  const [user] = useAuthState(auth);
+  const [currentModule, setCurrentModule] = useState(null);
+  const [userProgress, setUserProgress] = useState(0);
+  const [stepsStatus, setStepsStatus] = useState([]);
+  const navigate = useNavigate();
 
-  const progress = (modules.filter(m => m.completed).length / modules.length) * 100;
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        if (user) {
+          const progress = await getUserProgress(user.uid);
+          setUserProgress(progress);
+  
+          const moduleData = await getModuleData("module1"); // Cambia 'module1' por el ID adecuado
+          if (moduleData) {
+            setCurrentModule(moduleData);
+            const updatedSteps = moduleData.steps.map((step, index) => ({
+              ...step,
+              status: index < progress ? "completed" : index === progress ? "unlocked" : "locked"
+            }));
+            setStepsStatus(updatedSteps);
+          }
+        }
+      }
+      catch(error){
+        console.error("error", error.message);
+      }
+    };
+    loadUserData();
+  }, [user]);
+
+  const handleStepClick = (step) => {
+    if (step.status === "unlocked") {
+      navigate(`/course/step${step.stepId}`);
+    }
+  };
 
   return (
-    <Layout>
-      <CourseView modules={modules} progress={progress} />
-    <Link to={'/course/module/1'} >
-      <button className='my-4 mx-4 py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700'> Modulo 1</button>
-    </Link>
-    <Link to={'/course/module/2'} >
-      <button className='my-4 mx-4 py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700'> Modulo 2</button>
-    </Link>
-    <Link to={'/course/module/3'} >
-      <button className='my-4 mx-4 py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700'> Modulo 3</button>
-    </Link> 
-    </Layout>
+    <div className="bg-gray-100 min-h-screen">
+      <Navbar />
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Curso de Hábitos</h1>
+
+        {currentModule && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-700 mb-2">Actualmente te encuentras en:</h2>
+            <div className="p-4 border border-gray-300 bg-white rounded-lg shadow-lg">
+              <h3 className="text-lg font-bold text-gray-800">{currentModule.title}</h3>
+              <p className="text-gray-600">{currentModule.description}</p>
+            </div>
+          </div>
+        )}
+
+        {stepsStatus.length > 0 && (
+          <div className="space-y-4">
+            {stepsStatus.map((step) => (
+              <div
+                key={step.stepId}
+                className={`p-4 rounded-lg shadow-lg flex justify-between items-center ${
+                  step.status === "completed" 
+                    ? "bg-green-100 border-green-400" 
+                    : step.status === "unlocked" 
+                    ? "bg-blue-100 border-blue-400 cursor-pointer" 
+                    : "bg-gray-200 border-gray-400 cursor-not-allowed"
+                }`}
+                onClick={() => handleStepClick(step)}
+              >
+                <div>
+                  <h3 className={`font-semibold ${
+                    step.status === "completed" ? "text-green-600" : step.status === "unlocked" ? "text-blue-600" : "text-gray-600"
+                  }`}>
+                    {step.title}
+                  </h3>
+                </div>
+                <div className="text-sm">
+                  {step.status === "completed" && <span className="text-green-600">Completado</span>}
+                  {step.status === "unlocked" && <span className="text-blue-600">Disponible</span>}
+                  {step.status === "locked" && <span className="text-gray-600">Bloqueado</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold text-gray-700">Tu progreso actual:</h3>
+          <div className="w-full bg-gray-300 rounded-full h-4">
+            <div
+              className="bg-blue-600 h-4 rounded-full"
+              style={{ width: `${userProgress * (100 / (currentModule?.steps.length || 1))}%` }} // Calcula el porcentaje del progreso
+            ></div>
+          </div>
+          <p className="text-sm text-gray-600 mt-2">{userProgress} de {currentModule?.steps.length} pasos completados</p>
+        </div>
+      </div>
+    </div>
   );
 };
 
